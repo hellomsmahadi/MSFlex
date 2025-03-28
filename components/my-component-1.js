@@ -38,7 +38,7 @@
   var fetchProducts = async () => {
     try {
       // Get the endpoint URL from the Webflow CMS list element's attribute
-      const cmsApiList = document.getElementById('cms-api-list');
+      const cmsApiList = document.querySelector('.w-dyn-items');
       const endpointUrl = cmsApiList.getAttribute('data-database-endpoint-url');
       const response = await fetch(endpointUrl);
       const data = await response.json();
