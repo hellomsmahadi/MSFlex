@@ -1,7 +1,7 @@
 (() => {
   window.fsAttributes = window.fsAttributes || [];
   window.fsAttributes.push([
-    "cmsfilter",
+    'cmsfilter',
     async (filtersInstances) => {
       const [filtersInstance] = filtersInstances;
       const { listInstance } = filtersInstance;
@@ -34,17 +34,18 @@
     },
   ]);
 
-  // Fetch data from the new API endpoint
+  // Fetch data from the new API endpoint controlled via Webflow HTML attribute
   var fetchProducts = async () => {
     try {
-      const response = await fetch(
-        "https://x8ki-letl-twmt.n7.xano.io/api:vEyiBDFq/my_component_test_database_1"
-      );
+      // Get the endpoint URL from the Webflow CMS list element's attribute
+      const cmsApiList = document.getElementById('cms-api-list');
+      const endpointUrl = cmsApiList.getAttribute('data-database-endpoint-url');
+      const response = await fetch(endpointUrl);
       const data = await response.json();
       data.sort((a, b) => a.Serial_number - b.Serial_number);
       return data;
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error('Error fetching products:', error);
       return [];
     }
   };
@@ -53,14 +54,14 @@
   function generateSlug(title) {
     return title
       .toLowerCase()
-      .replace(/[^a-z0-9\s]/g, "") // à¦…à¦ªà§à¦°à§Ÿà§‹à¦œà¦¨à§€à§Ÿ à¦•à§à¦¯à¦¾à¦°à§‡à¦•à§à¦Ÿà¦¾à¦° à¦¸à¦°à¦¾à¦¨à§‹
-      .replace(/\s+/g, "-"); // à¦«à¦¾à¦à¦•à¦¾ à¦œà¦¾à§Ÿà¦—à¦¾ "-" à¦¦à¦¿à§Ÿà§‡ à¦ªà§à¦°à¦¤à¦¿à¦¸à§à¦¥à¦¾à¦ªà¦¨
+      .replace(/[^a-z0-9\s]/g, '') // à¦…à¦ªà§à¦°à§Ÿà§‹à¦œà¦¨à§€à§Ÿ à¦•à§à¦¯à¦¾à¦°à§‡à¦•à§à¦Ÿà¦¾à¦° à¦¸à¦°à¦¾à¦¨à§‹
+      .replace(/\s+/g, '-'); // à¦«à¦¾à¦à¦•à¦¾ à¦œà¦¾à§Ÿà¦—à¦¾ "-" à¦¦à¦¿à§Ÿà§‡ à¦ªà§à¦°à¦¤à¦¿à¦¸à§à¦¥à¦¾à¦ªà¦¨
   }
 
   // Create an item using the new data format
   var createItem = (product, index, templateElement) => {
     const newItem = templateElement.cloneNode(true);
-    const dynaSerialValue = String(index + 1).padStart(2, "0");
+    const dynaSerialValue = String(index + 1).padStart(2, '0');
 
     // Update all matching elements
     const images = newItem.querySelectorAll('[data-element="image"]');
@@ -128,11 +129,11 @@
 
     // Add event listener to Read More button
     readMoreButtons.forEach((button) => {
-      button.addEventListener("click", () => {
+      button.addEventListener('click', () => {
         const slug = generateSlug(product.Title); // Generate slug from product title
 
         // Redirect to free page if category is Free
-        if (product.Select_Category_Component === "Free") {
+        if (product.Select_Category_Component === 'Free') {
           const detailsPageUrl = `/free-example2?=${slug}-${product.Serial_number}-${product.id}-${product.Unique_text}`;
           window.location.href = detailsPageUrl;
         } else {
@@ -157,8 +158,8 @@
   // Create a filter element
   var createFilter = (category, templateElement) => {
     const newFilter = templateElement.cloneNode(true);
-    const label = newFilter.querySelector("span");
-    const radio = newFilter.querySelector("input");
+    const label = newFilter.querySelector('span');
+    const radio = newFilter.querySelector('input');
     if (!label || !radio) return;
     label.textContent = category;
     radio.value = category;
